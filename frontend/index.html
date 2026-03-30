@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Recommendation Chatbot</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1>🎵 Music Recommender</h1>
+            <p class="subtitle">Discover songs tailored to your mood</p>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Preferences Panel -->
+            <aside class="preferences-panel">
+                <h2>Your Preferences</h2>
+                
+                <div class="pref-section">
+                    <label>Preferred Moods</label>
+                    <div class="mood-buttons">
+                        <button class="mood-btn" data-mood="joyful">😊 Joyful</button>
+                        <button class="mood-btn" data-mood="energetic">⚡ Energetic</button>
+                        <button class="mood-btn" data-mood="melancholic">🌙 Melancholic</button>
+                        <button class="mood-btn" data-mood="emotional">💙 Emotional</button>
+                    </div>
+                </div>
+
+                <div class="pref-section">
+                    <label for="genre-filter">Genre</label>
+                    <select id="genre-filter" class="filter-input">
+                        <option value="">All Genres</option>
+                        <option value="pop">Pop</option>
+                        <option value="rock">Rock</option>
+                        <option value="hip hop">Hip Hop</option>
+                        <option value="r&b">R&B</option>
+                        <option value="country">Country</option>
+                        <option value="dance">Dance/Electronic</option>
+                    </select>
+                </div>
+
+                <div class="pref-section">
+                    <label>
+                        <input type="checkbox" id="explicit-filter">
+                        Exclude Explicit
+                    </label>
+                </div>
+
+                <div class="pref-section">
+                    <label for="year-filter">Year Range</label>
+                    <input type="range" id="year-filter" min="1999" max="2025" value="2025" class="filter-input">
+                    <span id="year-display">Up to 2025</span>
+                </div>
+            </aside>
+
+            <!-- Chat Section -->
+            <section class="chat-section">
+                <!-- Messages -->
+                <div id="chat-messages" class="messages">
+                    <div class="message bot-message">
+                        <p>👋 Hi! I'm your music recommendation bot. Tell me what mood you're in or what genre you'd like!</p>
+                    </div>
+                </div>
+
+                <!-- Input -->
+                <form id="chat-form" class="chat-input-form">
+                    <input 
+                        type="text" 
+                        id="chat-input" 
+                        placeholder="Try: 'I want energetic pop songs' or 'songs like Britney Spears'"
+                        autocomplete="off"
+                    >
+                    <button type="submit" class="send-btn">Send</button>
+                </form>
+            </section>
+        </main>
+
+        <!-- Recommendations -->
+        <section id="recommendations" class="recommendations-section hidden">
+            <h2>Recommended Songs</h2>
+            <div id="songs-list" class="songs-grid">
+                <!-- Songs rendered here -->
+            </div>
+        </section>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
