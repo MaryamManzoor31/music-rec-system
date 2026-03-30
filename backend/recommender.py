@@ -16,7 +16,7 @@ class RecommendationEngine:
                     pass
     
     def get_recommendations(self, mood=None, genre=None, artist=None, 
-                           count=5, user_prefs=None) -> list:
+                           count=10, user_prefs=None) -> list:
         """
         Get song recommendations based on mood, genre, artist
         """

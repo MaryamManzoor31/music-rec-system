@@ -65,7 +65,7 @@ def chat():
             mood=mood,
             genre=genre,
             artist=artist,
-            count=5,
+            count=10,
             user_prefs=user_preferences[session_id]
         )
         

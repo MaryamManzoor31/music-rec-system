@@ -223,8 +223,11 @@ body {
 /* Recommendations Section */
 .recommendations-section {
     margin-top: 40px;
-    padding-top: 30px;
+    padding: 30px 20px;
     border-top: 1px solid var(--border-color);
+    background: var(--bg-dark);
+    min-height: 400px;
+    display: block;
 }
 
 .recommendations-section h2 {
@@ -234,8 +237,9 @@ body {
 
 .songs-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 20px;
+    min-height: 300px;
 }
 
 .song-card {

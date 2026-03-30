@@ -2,17 +2,13 @@
 const API_BASE = 'http://localhost:5000/api';
 const SESSION_ID = 'session_' + Date.now();
 
-// DOM Elements
-const chatForm = document.getElementById('chat-form');
-const chatInput = document.getElementById('chat-input');
-const messagesContainer = document.getElementById('chat-messages');
-const recommendationsSection = document.getElementById('recommendations');
-const songsList = document.getElementById('songs-list');
-const moodButtons = document.querySelectorAll('.mood-btn');
-const genreFilter = document.getElementById('genre-filter');
-const explicitFilter = document.getElementById('explicit-filter');
-const yearFilter = document.getElementById('year-filter');
-const yearDisplay = document.getElementById('year-display');
+console.log('✅ App.js loaded!');
+console.log('API Base:', API_BASE);
+console.log('Session ID:', SESSION_ID);
+
+// DOM Elements (will be initialized after DOM loads)
+let chatForm, chatInput, messagesContainer, recommendationsSection, songsList;
+let moodButtons, genreFilter, explicitFilter, yearFilter, yearDisplay;
 
 // State
 let userPreferences = {
@@ -22,14 +18,45 @@ let userPreferences = {
     year_range: [1999, 2025]
 };
 
-// Event Listeners
-chatForm.addEventListener('submit', handleChatSubmit);
-moodButtons.forEach(btn => {
-    btn.addEventListener('click', handleMoodSelect);
-});
-genreFilter.addEventListener('change', handleGenreChange);
-explicitFilter.addEventListener('change', handleExplicitChange);
-yearFilter.addEventListener('input', handleYearChange);
+// Initialize when DOM is ready
+document.addEventListener('DOMContentLoaded', initializeApp);
+
+function initializeApp() {
+    console.log('🔧 Initializing app...');
+    
+    // Get DOM Elements
+    chatForm = document.getElementById('chat-form');
+    chatInput = document.getElementById('chat-input');
+    messagesContainer = document.getElementById('chat-messages');
+    recommendationsSection = document.getElementById('recommendations');
+    songsList = document.getElementById('songs-list');
+    moodButtons = document.querySelectorAll('.mood-btn');
+    genreFilter = document.getElementById('genre-filter');
+    explicitFilter = document.getElementById('explicit-filter');
+    yearFilter = document.getElementById('year-filter');
+    yearDisplay = document.getElementById('year-display');
+    
+    // Check if all elements exist
+    if (!chatForm) {
+        console.error('❌ chat-form not found!');
+        return;
+    }
+    console.log('✅ All DOM elements found');
+
+    // Event Listeners
+    chatForm.addEventListener('submit', handleChatSubmit);
+    moodButtons.forEach(btn => {
+        btn.addEventListener('click', handleMoodSelect);
+    });
+    genreFilter.addEventListener('change', handleGenreChange);
+    explicitFilter.addEventListener('change', handleExplicitChange);
+    yearFilter.addEventListener('input', handleYearChange);
+    
+    console.log('✅ Event listeners attached');
+    
+    // Load preferences on page load
+    loadPreferences();
+}
 
 // Functions
 
@@ -63,12 +90,18 @@ async function handleChatSubmit(e) {
         
         const data = await response.json();
         
+        console.log('API Response:', data);
+        console.log('Recommendations:', data.recommendations);
+        
         // Display bot response
         addMessage(data.response, 'bot');
         
         // Display recommendations if available
         if (data.recommendations && data.recommendations.length > 0) {
+            console.log('Displaying', data.recommendations.length, 'songs');
             displayRecommendations(data.recommendations);
+        } else {
+            console.log('No recommendations returned');
         }
     } catch (error) {
         addMessage('Sorry, something went wrong. Please try again. Make sure the backend server is running on http://localhost:5000', 'bot');
@@ -91,13 +124,28 @@ function addMessage(text, sender) {
  * Display recommended songs
  */
 function displayRecommendations(songs) {
-    songsList.innerHTML = '';
-    recommendationsSection.classList.remove('hidden');
+    console.log('displayRecommendations called with', songs.length, 'songs');
     
-    songs.forEach(song => {
+    // Clear previous songs
+    songsList.innerHTML = '';
+    
+    // Show the recommendations section
+    recommendationsSection.classList.remove('hidden');
+    recommendationsSection.style.display = 'block';
+    
+    // Add songs to the grid
+    songs.forEach((song, index) => {
         const card = createSongCard(song);
         songsList.appendChild(card);
     });
+    
+    console.log('Total cards added:', songsList.children.length);
+    
+    // Scroll to recommendations after a brief delay to ensure DOM is updated
+    setTimeout(() => {
+        console.log('Scrolling to recommendations...');
+        recommendationsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 300);
 }
 
 /**
@@ -194,7 +242,7 @@ async function updatePreferences() {
 }
 
 /**
- * Escape HTML special characters
+ * Escape HTML special characters to prevent XSS
  */
 function escapeHtml(text) {
     const div = document.createElement('div');
@@ -202,15 +250,18 @@ function escapeHtml(text) {
     return div.innerHTML;
 }
 
-// Load preferences on page load
-window.addEventListener('load', async () => {
+/**
+ * Load user preferences from backend
+ */
+async function loadPreferences() {
     try {
         const response = await fetch(`${API_BASE}/preferences?session_id=${SESSION_ID}`);
         if (response.ok) {
             const prefs = await response.json();
             userPreferences = { ...userPreferences, ...prefs };
+            console.log('✅ Preferences loaded:', userPreferences);
         }
     } catch (error) {
         console.error('Error loading preferences:', error);
     }
-});
+}
