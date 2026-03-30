@@ -1,11 +1,15 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 import pandas as pd
 from chatbot import ChatbotNLP
 from recommender import RecommendationEngine
 import os
 
-app = Flask(__name__)
+# Set up static folder path
+backend_dir = os.path.dirname(os.path.abspath(__file__))
+frontend_dir = os.path.join(os.path.dirname(backend_dir), 'frontend')
+
+app = Flask(__name__, static_folder=frontend_dir, static_url_path='')
 CORS(app)
 
 # Load data and initialize engines
@@ -121,6 +125,11 @@ def search_songs():
 def health():
     """Health check endpoint"""
     return jsonify({'status': 'ok', 'songs_loaded': len(df)})
+
+@app.route('/')
+def index():
+    """Serve the frontend"""
+    return send_from_directory(frontend_dir, 'index.html')
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)

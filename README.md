@@ -1,5 +1,10 @@
 # 🎵 Music Recommendation Chatbot
 
+To Run open save folder in device and unzip it.
+open in VS Code
+Refresh your browser at http://localhost:5000 to see the music recommendation app
+
+
 A minimalist, interactive music recommendation chatbot that uses simple NLP (keyword matching) to understand user preferences and suggest songs from a 2000-song dataset with rich audio features and mood classifications.
 
 ## Features
