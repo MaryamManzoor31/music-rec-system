@@ -2,6 +2,11 @@
 
 To Run open save folder in device and unzip it.
 open in VS Code
+open Terminal 
+music-rec-system\backend" && python app.py
+then
+music-rec-system\frontend" && python -m http.server 8000
+Browser: Opened to http://localhost:8000
 Refresh your browser at http://localhost:5000 to see the music recommendation app
 
 
